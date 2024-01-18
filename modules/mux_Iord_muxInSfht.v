@@ -1,4 +1,4 @@
-module mux_Iord_error_muxInSfht (
+module mux_Iord_muxInSfht (
     input wire   [1:0]     selector,
     input wire   [31:0]    data_0,
     input wire   [31:0]    data_1,
@@ -7,8 +7,8 @@ module mux_Iord_error_muxInSfht (
 );
     
     assign out_data = (selector == 2'b00) ? data_0 :
-    assign out_data = (selector == 2'b01) ? data_0 :
-    assign out_data = (selector == 2'b1x) ? data_0 :
-    32'b0;
+                      (selector == 2'b01) ? data_1 :
+                      (selector == 2'b10) ? data_2 :
+                      32'b0;
 
 endmodule

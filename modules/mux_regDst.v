@@ -10,7 +10,7 @@ module mux_regDst (
                       (selector == 3'b001) ? data_1                               :
                       (selector == 3'b010) ? 32'b00000000000000000000000000011101 :
                       (selector == 3'b011) ? data_3                               :
-                      (selector == 3'b1xx) ? 32'b00000000000000000000000000011111 :
+                      (selector == 3'b100) ? 32'b00000000000000000000000000011111 :
                       32'b0;
 
 endmodule

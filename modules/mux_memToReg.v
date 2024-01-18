@@ -9,6 +9,7 @@ module mux_memToReg (
     input wire    [31:0]      data_7,
     input wire    [31:0]      data_8,
     input wire    [31:0]      data_9,
+    input wire    [31:0]      data_10,
     output wire   [31:0]      out_data
 );
 
@@ -22,6 +23,7 @@ module mux_memToReg (
                       (selector == 4'b0111) ? data_7 :
                       (selector == 4'b1000) ? data_8 :
                       (selector == 4'b1001) ? data_9 :
+                      (selector == 4'b1010) ? data_10 :
                       32'b0;
 
     
