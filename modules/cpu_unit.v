@@ -1,6 +1,6 @@
 module cpu_unit(
-  wire clk,
-  wire rst,
+  input wire clk,
+  input wire rst
 );
   
   // Control wire
