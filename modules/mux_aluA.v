@@ -5,6 +5,6 @@ module mux_AluA (
     output wire    [31:0]      out_data
 );
 
-assign out_data = (selector) ? data_0 : data_1;
+assign out_data = (selector) ? data_1 : data_0;
     
 endmodule
