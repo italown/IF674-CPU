@@ -19,6 +19,9 @@ module cpu_unit(
   wire crtl_memDataRegWrite;
   wire crtl_rega;
   wire crtl_regb;
+  wire crtl_regaluout;
+  wire crtl_regepc;
+  
 
   // Data wires
   wire PC_w;
@@ -50,6 +53,7 @@ module cpu_unit(
   wire [31:0] XTEND_out;
   wire [31:0] SHIFT_LEFT_out;
   wire [31:0] SHIFT_LEFT_TWO_out;
+  wire [31:0] EPC_out;
 
   // Data wires da ULA
   wire [2:0] ULA_CRTL_out; // Controle da ULA == ENTRADA DA ULA
@@ -98,5 +102,11 @@ module cpu_unit(
   Ula32 ULA_(MUX_ULA_A_out, MUX_ULA_B_out, ULA_CRTL_out, ULA_RESULT, ULA_OVERFLOW, ULA_NEGATIVO, ULA_ZERO, ULA_EQ, ULA_GT, ULA_LT);
 
   shift_left_two SHIFT_LEFT_TWO_(PC_out, RS, RT, OFFSET, SHIFT_LEFT_TWO_out);
+
+  xtend_to_32 XTEND_TO_32_(ULA_LT, XTEND_TO_32_out);
+
+  Registrador REG_ALU_OUT_(clk, rst, crtl_regaluout, ULA_RESULT, ALU_out);
+
+  Registrador REG_EPC_(clk, rst, crtl_regepc, ULA_RESULT, EPC_out);
 
 endmodule
