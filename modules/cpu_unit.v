@@ -18,14 +18,15 @@ module cpu_unit(
   wire [2:0] crtl_pcsource;
   wire crtl_ls;
   wire [1:0] crtl_muxshf;
-
+  // Control wire reg desloc
+  wire [2:0] crtl_sideshifter;
   // Control wire registers
   wire crtl_memDataRegWrite;
   wire crtl_rega;
   wire crtl_regb;
   wire crtl_regaluout;
   wire crtl_regepc;
-  
+
 
   // Data wires
   wire PC_w;
@@ -122,5 +123,7 @@ module cpu_unit(
   mux_muxShft MUX_MUXSHFT_(crtl_muxshf, OFFSET, REG_B_out, MEM_DATA_REG_out, MUX_MUXSHFT_out);
 
   mux_Iord_muxInSfht MUX_INSFHT_(crtl_insfht, REG_A_out, XTEND_out, REG_B_out , MUX_INSFHT_out);
+ 
+  RegDesloc REG_DES_(clk, rst, crtl_sideshifter, MUX_MUXSHFT_out, MUX_INSFHT_out, REG_DES_out);
 
 endmodule
