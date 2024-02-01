@@ -61,6 +61,8 @@ module cpu_unit(
   wire [31:0] EPC_out;
   wire [31:0] MUX_MUXSHFT_out;
   wire [31:0] MUX_INSFHT_out;
+  wire [31:0] MULTI_DIV_HIGH_out;
+  wire [31:0] MULTI_DIV_LOW_out;
 
   // Data wires da ULA
   wire [2:0] ULA_CRTL_out; // Controle da ULA == ENTRADA DA ULA
@@ -126,8 +128,8 @@ module cpu_unit(
  
   RegDesloc REG_DES_(clk, rst, crtl_sideshifter, MUX_MUXSHFT_out, MUX_INSFHT_out, REG_DES_out);
 
-  Registrador REG_HIGH_(clk, rst, crtl_reghigh, MUX_MUXSHFT_out, REG_HIGH_out);
+  Registrador REG_HIGH_(clk, rst, crtl_reghigh, MULTI_DIV_HIGH_out, REG_HIGH_out);
 
-  Registrador REG_LOW_(clk, rst, crtl_reglow, MUX_INSFHT_out, REG_LOW_out);
+  Registrador REG_LOW_(clk, rst, crtl_reglow, MULTI_DIV_LOW_out, REG_LOW_out);
 
 endmodule
