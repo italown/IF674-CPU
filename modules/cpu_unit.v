@@ -14,6 +14,7 @@ module cpu_unit(
   wire crtl_regwrite;
   wire crtl_ulasrca;
   wire crtl_ulasrcb;
+  wire [2:0] crtl_pcsource;
 
   // Control wire registers
   wire crtl_memDataRegWrite;
@@ -25,7 +26,7 @@ module cpu_unit(
 
   // Data wires
   wire PC_w;
-  wire [31:0] PC_in;
+  wire [31:0] MUX_PC_SOURCE_out;
   wire [31:0] PC_out;
   wire [31:0] MUX_error_out;
   wire [31:0] MUX_iord_out;
@@ -67,7 +68,7 @@ module cpu_unit(
 
 
 
-  Registrador PC_(clk, rst, PC_w, PC_in, PC_out);  // PC_w = ULA zero, PC_in = MUX_final
+  Registrador PC_(clk, rst, PC_w, MUX_PC_SOURCE_out, PC_out);  // PC_w = ULA zero, MUX_PC_SOURCE_out = MUX_final
 
   mux_error MUX_ERROR_(crtl_error, MUX_error_out);  // crtl_error = unit_control_error, error_out = mux output
 
@@ -108,5 +109,7 @@ module cpu_unit(
   Registrador REG_ALU_OUT_(clk, rst, crtl_regaluout, ULA_RESULT, ALU_out);
 
   Registrador REG_EPC_(clk, rst, crtl_regepc, ULA_RESULT, EPC_out);
+
+  mux_pcSource MUX_PC_SOURCE_(crtl_pcsource, ULA_RESULT, EPC_out, ALU_out, REG_A_out, SHIFT_LEFT_TWO_out,  LOAD_SIZE_out, MEM_DATA_REG_out, MUX_PC_SOURCE_out); 
 
 endmodule
