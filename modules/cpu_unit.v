@@ -82,7 +82,7 @@ module cpu_unit(
   wire ULA_GT; // Sinaliza se A>B
   wire ULA_LT; // Sinaliza se A<B
 
-  PC_w =  (crtl_pcwrite || (ULA_ZERO && crtl_pcwritecond));
+  assign PC_w = (crtl_pcwrite || (ULA_ZERO && crtl_pcwritecond));
 
   Registrador PC_(clk, rst, PC_w, MUX_PC_SOURCE_out, PC_out);  // PC_w = ULA zero, MUX_PC_SOURCE_out = MUX_final
 
@@ -120,7 +120,7 @@ module cpu_unit(
 
   shift_left_two SHIFT_LEFT_TWO_(PC_out, RS, RT, OFFSET, SHIFT_LEFT_TWO_out);
 
-  xtend_to_32 XTEND_TO_32_(ULA_LT, XTEND_TO_32 _out);
+  xtend_to_32 XTEND_TO_32_(ULA_LT, XTEND_TO_32_out);
 
   Registrador REG_ALU_OUT_(clk, rst, crtl_regaluout, ULA_RESULT, ALU_out);
 
