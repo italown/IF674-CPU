@@ -48,8 +48,8 @@ module cpu_unit(
   wire [31:0] REG_DES_out;
   wire [31:0] MEM_DATA_REG_out; 
   wire [31:0] XTEND_TO_32_out;
-  wire [31:0] HIGH_REG_out;
-  wire [31:0] LOW_REG_out;
+  wire [31:0] REG_HIGH_out;
+  wire [31:0] REG_LOW_out;
   wire [31:0] LOAD_SIZE_out;
   wire [31:0] READ_DATA_A_out;
   wire [31:0] READ_DATA_B_out;
@@ -88,7 +88,7 @@ module cpu_unit(
  
   mux_regDst MUX_REG_DST_(crtl_regdst, RT, RS, OFFSET, MUX_REG_DST_out); 
               
-  mux_memToReg MUX_MEM_TO_REG_(crtl_memtoreg, REG_B_out , ALU_out, REG_DES_out, REG_A_out, MEM_DATA_REG_out, XTEND_TO_32_out, HIGH_REG_out, LOW_REG_out , PC_out, LOAD_SIZE_out, MUX_MEM_TO_REG_out);
+  mux_memToReg MUX_MEM_TO_REG_(crtl_memtoreg, REG_B_out , ALU_out, REG_DES_out, REG_A_out, MEM_DATA_REG_out, XTEND_TO_32_out, REG_HIGH_out, REG_LOW_out , PC_out, LOAD_SIZE_out, MUX_MEM_TO_REG_out);
 
   Registrador MEM_DATA_REG_(clk, rst, crtl_memDataRegWrite,  MEM_out, MEM_DATA_REG_out);
 
@@ -125,5 +125,9 @@ module cpu_unit(
   mux_Iord_muxInSfht MUX_INSFHT_(crtl_insfht, REG_A_out, XTEND_out, REG_B_out , MUX_INSFHT_out);
  
   RegDesloc REG_DES_(clk, rst, crtl_sideshifter, MUX_MUXSHFT_out, MUX_INSFHT_out, REG_DES_out);
+
+  Registrador REG_HIGH_(clk, rst, crtl_reghigh, MUX_MUXSHFT_out, REG_HIGH_out);
+
+  Registrador REG_LOW_(clk, rst, crtl_reglow, MUX_INSFHT_out, REG_LOW_out);
 
 endmodule
