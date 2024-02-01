@@ -15,6 +15,7 @@ module cpu_unit(
   wire crtl_ulasrca;
   wire crtl_ulasrcb;
   wire [2:0] crtl_pcsource;
+  wire crtl_ls;
 
   // Control wire registers
   wire crtl_memDataRegWrite;
@@ -98,7 +99,7 @@ module cpu_unit(
 
   sign_xtend XTEND_(OFFSET, XTEND_out);
 
-  shift_left SHIFT_LEFT_(XTEND_out, SHIFT_LEFT_out);
+  shift_left SHIFT_LEFT_(XTEND_out, SHIFT_LEFT_out);   
 
   Ula32 ULA_(MUX_ULA_A_out, MUX_ULA_B_out, ULA_CRTL_out, ULA_RESULT, ULA_OVERFLOW, ULA_NEGATIVO, ULA_ZERO, ULA_EQ, ULA_GT, ULA_LT);
 
@@ -110,6 +111,8 @@ module cpu_unit(
 
   Registrador REG_EPC_(clk, rst, crtl_regepc, ULA_RESULT, EPC_out);
 
-  mux_pcSource MUX_PC_SOURCE_(crtl_pcsource, ULA_RESULT, EPC_out, ALU_out, REG_A_out, SHIFT_LEFT_TWO_out,  LOAD_SIZE_out, MEM_DATA_REG_out, MUX_PC_SOURCE_out); 
+  mux_pcSource MUX_PC_SOURCE_(crtl_pcsource, ULA_RESULT, EPC_out, ALU_out, REG_A_out, SHIFT_LEFT_TWO_out, LOAD_SIZE_out, MEM_DATA_REG_out, MUX_PC_SOURCE_out);
+
+  load_size LOAD_SIZE_(crtl_ls, MEM_DATA_REG_out, LOAD_SIZE_out);
 
 endmodule
