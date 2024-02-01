@@ -16,6 +16,7 @@ module cpu_unit(
   wire crtl_ulasrcb;
   wire [2:0] crtl_pcsource;
   wire crtl_ls;
+  wire [1:0] crtl_muxshf;
 
   // Control wire registers
   wire crtl_memDataRegWrite;
@@ -56,6 +57,7 @@ module cpu_unit(
   wire [31:0] SHIFT_LEFT_out;
   wire [31:0] SHIFT_LEFT_TWO_out;
   wire [31:0] EPC_out;
+  wire [31:0] MUX_MUXSHFT_out;
 
   // Data wires da ULA
   wire [2:0] ULA_CRTL_out; // Controle da ULA == ENTRADA DA ULA
@@ -105,7 +107,7 @@ module cpu_unit(
 
   shift_left_two SHIFT_LEFT_TWO_(PC_out, RS, RT, OFFSET, SHIFT_LEFT_TWO_out);
 
-  xtend_to_32 XTEND_TO_32_(ULA_LT, XTEND_TO_32_out);
+  xtend_to_32 XTEND_TO_32_(ULA_LT, XTEND_TO_32 _out);
 
   Registrador REG_ALU_OUT_(clk, rst, crtl_regaluout, ULA_RESULT, ALU_out);
 
@@ -114,5 +116,7 @@ module cpu_unit(
   mux_pcSource MUX_PC_SOURCE_(crtl_pcsource, ULA_RESULT, EPC_out, ALU_out, REG_A_out, SHIFT_LEFT_TWO_out, LOAD_SIZE_out, MEM_DATA_REG_out, MUX_PC_SOURCE_out);
 
   load_size LOAD_SIZE_(crtl_ls, MEM_DATA_REG_out, LOAD_SIZE_out);
+
+  mux_muxShft MUX_MUXSHFT_(crtl_muxshf, OFFSET, REG_B_out, MEM_DATA_REG_out, MUX_MUXSHFT_out);
 
 endmodule
