@@ -18,6 +18,10 @@ module cpu_unit(
   wire [2:0] crtl_pcsource;
   wire crtl_ls;
   wire [1:0] crtl_muxshf;
+  wire crtl_aluop;
+  wire crtl_setmd;
+  wire crtl_pcwritecond;
+  wire crtl_pcwrite;
   // Control wire reg desloc
   wire [2:0] crtl_sideshifter;
   // Control wire registers
@@ -26,6 +30,9 @@ module cpu_unit(
   wire crtl_regb;
   wire crtl_regaluout;
   wire crtl_regepc;
+  wire crtl_reghigh;
+  wire crtl_reglow;
+
 
 
   // Data wires
@@ -63,6 +70,7 @@ module cpu_unit(
   wire [31:0] MUX_INSFHT_out;
   wire [31:0] MULTI_DIV_HIGH_out;
   wire [31:0] MULTI_DIV_LOW_out;
+  wire zero;
 
   // Data wires da ULA
   wire [2:0] ULA_CRTL_out; // Controle da ULA == ENTRADA DA ULA
@@ -74,7 +82,7 @@ module cpu_unit(
   wire ULA_GT; // Sinaliza se A>B
   wire ULA_LT; // Sinaliza se A<B
 
-
+  PC_w =  (crtl_pcwrite || (ULA_ZERO && crtl_pcwritecond));
 
   Registrador PC_(clk, rst, PC_w, MUX_PC_SOURCE_out, PC_out);  // PC_w = ULA zero, MUX_PC_SOURCE_out = MUX_final
 
@@ -131,5 +139,7 @@ module cpu_unit(
   Registrador REG_HIGH_(clk, rst, crtl_reghigh, MULTI_DIV_HIGH_out, REG_HIGH_out);
 
   Registrador REG_LOW_(clk, rst, crtl_reglow, MULTI_DIV_LOW_out, REG_LOW_out);
+
+  multi_div MULTI_DIV_(clk, crtl_setmd, rst, REG_A_out, REG_B_out, MULTI_DIV_HIGH_out, MULTI_DIV_LOW_out, zero);
 
 endmodule
