@@ -6,6 +6,7 @@ module cpu_unit(
   // Control wire
   wire [1:0] crtl_error;
   wire [1:0] crtl_iord;
+  wire [1:0] crtl_insfht; 
   wire [1:0] crtl_ss;
   wire crtl_memwrite;
   wire crtl_irwrite;
@@ -58,6 +59,7 @@ module cpu_unit(
   wire [31:0] SHIFT_LEFT_TWO_out;
   wire [31:0] EPC_out;
   wire [31:0] MUX_MUXSHFT_out;
+  wire [31:0] MUX_INSFHT_out;
 
   // Data wires da ULA
   wire [2:0] ULA_CRTL_out; // Controle da ULA == ENTRADA DA ULA
@@ -118,5 +120,7 @@ module cpu_unit(
   load_size LOAD_SIZE_(crtl_ls, MEM_DATA_REG_out, LOAD_SIZE_out);
 
   mux_muxShft MUX_MUXSHFT_(crtl_muxshf, OFFSET, REG_B_out, MEM_DATA_REG_out, MUX_MUXSHFT_out);
+
+  mux_Iord_muxInSfht MUX_INSFHT_(crtl_insfht, REG_A_out, XTEND_out, REG_B_out , MUX_INSFHT_out);
 
 endmodule
