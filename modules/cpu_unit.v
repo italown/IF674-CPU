@@ -71,6 +71,7 @@ module cpu_unit(
   wire [31:0] MULTI_DIV_HIGH_out;
   wire [31:0] MULTI_DIV_LOW_out;
   wire zero;
+  wire [5:0] FUNCT;
 
   // Data wires da ULA
   wire [2:0] ULA_CRTL_out; // Controle da ULA == ENTRADA DA ULA
@@ -82,7 +83,46 @@ module cpu_unit(
   wire ULA_GT; // Sinaliza se A>B
   wire ULA_LT; // Sinaliza se A<B
 
+  crtl_unit CRTL_UNIT_(
+    clk, 
+    rst, 
+    FUNCT,
+    OPCODE, 
+    ULA_EQ, 
+    ULA_GT,
+    crtl_error,
+    crtl_iord,
+    crtl_insfht, 
+    crtl_ss,
+    crtl_memwrite,
+    crtl_irwrite,
+    crtl_regdst,
+    crtl_memtoreg,
+    crtl_regwrite,
+    crtl_ulasrca,
+    crtl_ulasrcb,
+    crtl_pcsource,
+    crtl_ls,
+    crtl_muxshf,
+    crtl_aluop,
+    crtl_setmd,
+    crtl_pcwritecond,
+    crtl_pcwrite,
+    // Control wire reg desloc
+    crtl_sideshifter,
+    // Control wire registers
+    crtl_memDataRegWrite,
+    crtl_rega,
+    crtl_regb,
+    crtl_regaluout,
+    crtl_regepc,
+    crtl_reghigh,
+    crtl_reglow,
+    );
+
   assign PC_w = (crtl_pcwrite || (ULA_ZERO && crtl_pcwritecond));
+
+  cut_function CUT_FUNCTION_(OFFSET, FUNCT);
 
   Registrador PC_(clk, rst, PC_w, MUX_PC_SOURCE_out, PC_out);  // PC_w = ULA zero, MUX_PC_SOURCE_out = MUX_final
 
