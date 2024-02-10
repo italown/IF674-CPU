@@ -18,11 +18,11 @@ module crtl_unit(
   output reg [3:0] crtl_memtoreg,
   output reg crtl_regwrite,
   output reg crtl_ulasrca,
-  output reg crtl_ulasrcb,
+  output reg [1:0] crtl_ulasrcb,
   output reg [2:0] crtl_pcsource,
   output reg crtl_ls,
   output reg [1:0] crtl_muxshf,
-  output reg crtl_aluop,
+  output reg [2:0] crtl_aluop,
   output reg crtl_setmd,
   output reg crtl_pcwritecond,
   output reg crtl_pcwrite,
@@ -128,8 +128,8 @@ always @(posedge clk) begin
         STATE = ST_RESET;
         // Setting all signals
         crtl_ulasrca = 1'b0;      
-        crtl_ulasrcb = 1'b0;         
-        crtl_aluop = 1'b0;                     
+        crtl_ulasrcb = 2'b00;         
+        crtl_aluop = 3'b000;                     
         crtl_pcsource = 3'b000;     
         crtl_iord = 2'b00;          
         crtl_memwrite = 1'b0;       
@@ -160,8 +160,8 @@ always @(posedge clk) begin
         STATE = ST_COMMON;
         // Setting all signals
         crtl_ulasrca = 1'b0;          
-        crtl_ulasrcb = 1'b0;         
-        crtl_aluop = 1'b0;                     
+        crtl_ulasrcb = 2'b00;         
+        crtl_aluop = 3'b000;                     
         crtl_pcsource = 3'b000;     
         crtl_iord = 2'b00;          
         crtl_memwrite = 1'b0;       
@@ -196,8 +196,8 @@ always @(posedge clk) begin
           STATE = ST_COMMON;
           // Setting all signals
           crtl_ulasrca = 1'b0;        ///////
-          crtl_ulasrcb = 1'b1;        ///////
-          crtl_aluop = 1'b1;          ///////
+          crtl_ulasrcb = 2'b01;       ///////
+          crtl_aluop = 3'b001;        ///////
           crtl_pcsource = 3'b000;     ///////
           crtl_iord = 2'b00;          ///////
           crtl_memwrite = 1'b0;       ///////
@@ -228,8 +228,8 @@ always @(posedge clk) begin
           STATE = ST_COMMON;
           // Setting all signals
           crtl_ulasrca = 1'b0;        ///////
-          crtl_ulasrcb = 1'b1;        ///////
-          crtl_aluop = 1'b1;          ///////
+          crtl_ulasrcb = 2'b01;       ///////
+          crtl_aluop = 3'b001;        ///////
           crtl_pcsource = 3'b000;     ///////
           crtl_iord = 2'b00;          ///////
           crtl_memwrite = 1'b0;       ///////
@@ -366,8 +366,8 @@ always @(posedge clk) begin
             end
           endcase
           crtl_ulasrca = 1'b0;        
-          crtl_ulasrcb = 1'b0;        ///////
-          crtl_aluop = 1'b0;          ///////
+          crtl_ulasrcb = 2'b00;        ///////
+          crtl_aluop = 3'b000;         ///////
           crtl_pcsource = 3'b000;     
           crtl_iord = 2'b00;          
           crtl_memwrite = 1'b0;       
@@ -392,7 +392,7 @@ always @(posedge clk) begin
           crtl_reghigh = 1'b0;
           crtl_reglow = 1'b0;
           // Setting counter for next operation
-          COUNTER = 5'b00000;
+          COUNTER = 6'b000000;
         end
       end
       ST_ADD: begin
@@ -400,8 +400,8 @@ always @(posedge clk) begin
           STATE = ST_ADD;
           // Setting all signals
           crtl_ulasrca = 1'b0;            
-          crtl_ulasrcb = 1'b0;            
-          crtl_aluop = 1'b0;          
+          crtl_ulasrcb = 2'b00;            
+          crtl_aluop = 3'b000;          
           crtl_pcsource = 3'b000;     
           crtl_iord = 2'b00;          
           crtl_memwrite = 1'b0;       
@@ -432,8 +432,8 @@ always @(posedge clk) begin
           STATE = ST_ADD;
           // Setting all signals
           crtl_ulasrca = 1'b1;         /////// 
-          crtl_ulasrcb = 1'b0;         ///////
-          crtl_aluop = 1'b1;           ///////          
+          crtl_ulasrcb = 2'b00;         ///////
+          crtl_aluop = 3'b001;           ///////          
           crtl_pcsource = 3'b000;     
           crtl_iord = 2'b00;          
           crtl_memwrite = 1'b0;       
@@ -464,8 +464,8 @@ always @(posedge clk) begin
           STATE = ST_COMMON;
           // Setting all signals
           crtl_ulasrca = 1'b1;          
-          crtl_ulasrcb = 1'b0;         
-          crtl_aluop = 1'b1;                     
+          crtl_ulasrcb = 2'b00;         
+          crtl_aluop =3'b001;                     
           crtl_pcsource = 3'b000;     
           crtl_iord = 2'b00;          
           crtl_memwrite = 1'b0;       
@@ -474,7 +474,7 @@ always @(posedge clk) begin
           crtl_ss = 2'b00;
           crtl_irwrite = 1'b0;        
           crtl_regdst = 3'b011;         ///////
-          crtl_memtoreg = 4'b0000;      ///////
+          crtl_memtoreg = 4'b0010;      ///////
           crtl_regwrite = 1'b1;         ///////  
           crtl_ls = 1'b0;
           crtl_muxshf = 2'b00;
@@ -493,6 +493,361 @@ always @(posedge clk) begin
           COUNTER = 0;
         end
       end
+      ST_RTE: begin
+        if (COUNTER == 6'b000000) begin //TODO Validar
+          STATE = ST_COMMON;
+          crtl_ulasrca = 1'b0;          
+          crtl_ulasrcb = 2'b00;         
+          crtl_aluop = 3'b000;                     
+          crtl_pcsource = 3'b001;        ////////  
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;         
+          crtl_memtoreg = 4'b0000;      
+          crtl_regwrite = 1'b0;           
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b1;            ////////        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;             
+          crtl_regb = 1'b0;             
+          crtl_regaluout = 1'b0;        
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = 0;
+        end
+      end
+      ST_SUB: begin
+        if (COUNTER == 6'b000000) begin
+          STATE = ST_SUB;
+
+          crtl_ulasrca = 1'b0;          
+          crtl_ulasrcb = 2'b00;         
+          crtl_aluop = 3'b000;                     
+          crtl_pcsource = 3'b000;     
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;         
+          crtl_memtoreg = 4'b0000;      
+          crtl_regwrite = 1'b0;              ////////       
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b1;                   ///////        
+          crtl_regb = 1'b1;                   ///////
+          crtl_regaluout = 1'b0;        
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER + 1;
+        end else if (COUNTER == 6'b000001) begin
+          STATE = ST_SUB;
+
+          crtl_ulasrca = 1'b1;            ///////       
+          crtl_ulasrcb = 2'b00;           //////       
+          crtl_aluop = 3'b010;            //////             
+          crtl_pcsource = 3'b000;         
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;         
+          crtl_memtoreg = 4'b0000;      
+          crtl_regwrite = 1'b0;           
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;               ///////
+          crtl_regb = 1'b0;               /////// 
+          crtl_regaluout = 1'b1;          ///////       
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER + 1;
+        end else if (COUNTER == 6'b000010) begin
+          STATE = ST_COMMON;
+          
+          crtl_ulasrca = 1'b1;          
+          crtl_ulasrcb = 2'b00;        
+          crtl_aluop = 3'b000;                     
+          crtl_pcsource = 3'b000;     
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b011;         ///////
+          crtl_memtoreg = 4'b0010;      ///////
+          crtl_regwrite = 1'b1;         ///////  
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;             
+          crtl_regb = 1'b0;             
+          crtl_regaluout = 1'b0;        ///////
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = 0;
+        end
+      end
+      ST_AND: begin
+        if (COUNTER == 6'b000000) begin
+          STATE = ST_AND;
+
+          crtl_ulasrca = 1'b0;          
+          crtl_ulasrcb = 2'b00;         
+          crtl_aluop = 3'b000;                     
+          crtl_pcsource = 3'b000;     
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;         
+          crtl_memtoreg = 4'b0000;      
+          crtl_regwrite = 1'b0;              ////////       
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b1;                   ///////        
+          crtl_regb = 1'b1;                   ///////
+          crtl_regaluout = 1'b0;        
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER + 1;
+        end else if (COUNTER == 6'b000001) begin
+          STATE = ST_AND;
+
+          crtl_ulasrca = 1'b1;            ///////       
+          crtl_ulasrcb = 2'b00;           //////       
+          crtl_aluop = 3'b011;            //////             
+          crtl_pcsource = 3'b000;         
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;         
+          crtl_memtoreg = 4'b0000;      
+          crtl_regwrite = 1'b0;           
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;               ///////
+          crtl_regb = 1'b0;               /////// 
+          crtl_regaluout = 1'b1;          ///////       
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER + 1;
+        end else if (COUNTER == 6'b000010) begin
+          STATE = ST_COMMON;
+          
+          crtl_ulasrca = 1'b1;          
+          crtl_ulasrcb = 2'b00;        
+          crtl_aluop = 3'b000;                     
+          crtl_pcsource = 3'b000;     
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b011;         ///////
+          crtl_memtoreg = 4'b0010;      ///////
+          crtl_regwrite = 1'b1;         ///////  
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;             
+          crtl_regb = 1'b0;             
+          crtl_regaluout = 1'b0;        ///////
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = 0;
+        end
+      end
+      ST_XCHG: begin
+        if(COUNTER == 6'b000000) begin
+          STATE = ST_XCHG;
+
+          crtl_ulasrca = 1'b0;        
+          crtl_ulasrcb = 2'b00;      
+          crtl_aluop = 3'b000;         
+          crtl_pcsource = 3'b000;    
+          crtl_iord = 2'b00;         
+          crtl_memwrite = 1'b0;      
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;       
+          crtl_regdst = 3'b000;
+          crtl_memtoreg = 4'b0000;
+          crtl_regwrite = 1'b0;             ///////
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;       
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b1;                  ///////
+          crtl_regb = 1'b1;                  //////
+          crtl_regaluout = 1'b0;
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER + 1;
+        end else if (COUNTER == 6'b000001) begin
+          STATE = ST_XCHG;
+
+          crtl_ulasrca = 1'b0;        
+          crtl_ulasrcb = 2'b00;        
+          crtl_aluop = 3'b000;          
+          crtl_pcsource = 3'b000;     
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;               ////////
+          crtl_memtoreg = 4'b0100;            ////////
+          crtl_regwrite = 1'b1;               ////////
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;                   ////////
+          crtl_regb = 1'b0;                   /////////
+          crtl_regaluout = 1'b0;
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER + 1;
+        end else if (COUNTER == 6'b000010) begin
+          STATE = ST_COMMON;
+          
+          crtl_ulasrca = 1'b0;        
+          crtl_ulasrcb = 2'b00;        
+          crtl_aluop = 3'b000;          
+          crtl_pcsource = 3'b000;     
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b001;             ////////
+          crtl_memtoreg = 4'b0001;          ////////
+          crtl_regwrite = 1'b1;             ////////
+          crtl_ls = 1'b0;                   
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b0;        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;
+          crtl_regb = 1'b0;
+          crtl_regaluout = 1'b0;
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = 0;
+        end
+      end
+      ST_BREAK: begin
+        if(COUNTER == 6'b000000) begin
+          STATE = ST_COMMON;
+          crtl_ulasrca = 1'b0;              //////
+          crtl_ulasrcb = 2'b01;             //////
+          crtl_aluop = 3'b010;              //////          
+          crtl_pcsource = 3'b000;           ////// 
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;
+          crtl_memtoreg = 4'b0000;
+          crtl_regwrite = 1'b0;
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b1;                //////
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;
+          crtl_regb = 1'b0;
+          crtl_regaluout = 1'b0;
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = 0;
+        end
+      end
+
     endcase
   end
 end
