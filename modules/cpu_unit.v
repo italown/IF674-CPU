@@ -18,7 +18,6 @@ module cpu_unit(
   wire [2:0] crtl_pcsource;
   wire crtl_ls;
   wire [1:0] crtl_muxshf;
-  wire crtl_aluop;
   wire crtl_setmd;
   wire crtl_pcwritecond;
   wire crtl_pcwrite;
@@ -74,7 +73,7 @@ module cpu_unit(
   wire [5:0] FUNCT;
 
   // Data wires da ULA
-  wire [2:0] ULA_CRTL_out; // Controle da ULA == ENTRADA DA ULA
+  wire [2:0] crtl_aluop;
   wire [31:0] ULA_RESULT; // Resultado da ULA
   wire ULA_OVERFLOW; // Sinaliza Overflow da ULA
   wire ULA_NEGATIVO; // Sinaliza negativo da ULA
@@ -156,7 +155,7 @@ module cpu_unit(
 
   shift_left SHIFT_LEFT_(XTEND_out, SHIFT_LEFT_out);   
 
-  Ula32 ULA_(MUX_ULA_A_out, MUX_ULA_B_out, ULA_CRTL_out, ULA_RESULT, ULA_OVERFLOW, ULA_NEGATIVO, ULA_ZERO, ULA_EQ, ULA_GT, ULA_LT);
+  Ula32 ULA_(MUX_ULA_A_out, MUX_ULA_B_out, crtl_aluop, ULA_RESULT, ULA_OVERFLOW, ULA_NEGATIVO, ULA_ZERO, ULA_EQ, ULA_GT, ULA_LT);
 
   shift_left_two SHIFT_LEFT_TWO_(PC_out, RS, RT, OFFSET, SHIFT_LEFT_TWO_out);
 
