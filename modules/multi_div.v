@@ -12,7 +12,8 @@ module multi_div (
     reg [31:0] result_low;
     reg        zero_flag;
     reg        operation_started; 
-    reg [5:0]  cycle_counter;     
+    reg [5:0]  cycle_counter;
+    
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             zero_flag <= 0;

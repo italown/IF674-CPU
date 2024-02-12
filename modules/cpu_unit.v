@@ -14,9 +14,9 @@ module cpu_unit(
   wire [3:0] crtl_memtoreg;
   wire crtl_regwrite;
   wire crtl_ulasrca;
-  wire crtl_ulasrcb;
+  wire [1:0] crtl_ulasrcb;
   wire [2:0] crtl_pcsource;
-  wire crtl_ls;
+  wire [1:0] crtl_ls;
   wire [1:0] crtl_muxshf;
   wire crtl_setmd;
   wire crtl_pcwritecond;
@@ -49,7 +49,7 @@ module cpu_unit(
   wire [4:0] RS;              // Bits 25 a 21 da instrução
   wire [4:0] RT;              // Bits 20 a 16 da instrução
   wire [15:0] OFFSET;         // Bits 15 a 0 da instrução
-  wire [31:0] MUX_REG_DST_out;
+  wire [4:0] MUX_REG_DST_out;
   wire [31:0] MUX_MEM_TO_REG_out;
   wire [31:0] REG_DES_out;
   wire [31:0] MEM_DATA_REG_out; 
@@ -65,7 +65,7 @@ module cpu_unit(
   wire [31:0] SHIFT_LEFT_out;
   wire [31:0] SHIFT_LEFT_TWO_out;
   wire [31:0] EPC_out;
-  wire [31:0] MUX_MUXSHFT_out;
+  wire [4:0] MUX_MUXSHFT_out;
   wire [31:0] MUX_INSFHT_out;
   wire [31:0] MULTI_DIV_HIGH_out;
   wire [31:0] MULTI_DIV_LOW_out;
@@ -116,7 +116,7 @@ module cpu_unit(
     crtl_regaluout,
     crtl_regepc,
     crtl_reghigh,
-    crtl_reglow,
+    crtl_reglow
     );
 
   assign PC_w = (crtl_pcwrite || (ULA_ZERO && crtl_pcwritecond));
@@ -135,7 +135,7 @@ module cpu_unit(
 
   Instr_Reg IR_(clk, rst, crtl_irwrite, MEM_out, OPCODE, RS, RT, OFFSET);
  
-  mux_regDst MUX_REG_DST_(crtl_regdst, RT, RS, OFFSET, MUX_REG_DST_out); 
+  mux_regDst MUX_REG_DST_(crtl_regdst, RT, RS, OFFSET[4:0], MUX_REG_DST_out); 
               
   mux_memToReg MUX_MEM_TO_REG_(crtl_memtoreg, REG_B_out , ALU_out, REG_DES_out, REG_A_out, MEM_DATA_REG_out, XTEND_TO_32_out, REG_HIGH_out, REG_LOW_out , PC_out, LOAD_SIZE_out, MUX_MEM_TO_REG_out);
 
@@ -169,7 +169,7 @@ module cpu_unit(
 
   load_size LOAD_SIZE_(crtl_ls, MEM_DATA_REG_out, LOAD_SIZE_out);
 
-  mux_muxShft MUX_MUXSHFT_(crtl_muxshf, OFFSET, REG_B_out, MEM_DATA_REG_out, MUX_MUXSHFT_out);
+  mux_muxShft MUX_MUXSHFT_(crtl_muxshf, {16'b0, OFFSET}, REG_B_out, MEM_DATA_REG_out, MUX_MUXSHFT_out);
 
   mux_Iord_muxInSfht MUX_INSFHT_(crtl_insfht, REG_A_out, XTEND_out, REG_B_out , MUX_INSFHT_out);
  
