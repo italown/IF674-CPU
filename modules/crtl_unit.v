@@ -125,6 +125,8 @@ reg STARTER = 1'b0;
 always @(posedge clk) begin
   if (STARTER != 1'b1) begin
     STARTER = 1'b1;
+    STATE = ST_COMMON;
+    
     crtl_ulasrca = 1'b0;      
     crtl_ulasrcb = 2'b00;         
     crtl_aluop = 3'b000;                     

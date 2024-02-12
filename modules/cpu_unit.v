@@ -133,7 +133,7 @@ module cpu_unit(
 
   store_size STORE_SIZE_(crtl_ss, REG_B_out, STORE_SIZE_out); 
 
-  Instr_Reg IR_(clk, rst, crtl_irwrite, MEM_out, OPCODE, RS, RT, OFFSET);
+  Instr_Reg IR_(clk, rst, 1'b1, MEM_out, OPCODE, RS, RT, OFFSET); //crtl_irwrite
  
   mux_regDst MUX_REG_DST_(crtl_regdst, RT, RS, OFFSET[4:0], MUX_REG_DST_out); 
               
