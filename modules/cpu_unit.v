@@ -116,14 +116,15 @@ module cpu_unit(
     crtl_regaluout,
     crtl_regepc,
     crtl_reghigh,
-    crtl_reglow
+    crtl_reglow,
+    out_reset
     );
 
   assign PC_w = (crtl_pcwrite || (ULA_ZERO && crtl_pcwritecond));
 
   cut_function CUT_FUNCTION_(OFFSET, FUNCT);
 
-  Registrador PC_(clk, rst, PC_w, MUX_PC_SOURCE_out, PC_out);  // PC_w = ULA zero, MUX_PC_SOURCE_out = MUX_final
+  Registrador PC_(clk, out_reset, PC_w, MUX_PC_SOURCE_out, PC_out);  // PC_w = ULA zero, MUX_PC_SOURCE_out = MUX_final
 
   mux_error MUX_ERROR_(crtl_error, MUX_error_out);  // crtl_error = unit_control_error, error_out = mux output
 
@@ -133,19 +134,19 @@ module cpu_unit(
 
   store_size STORE_SIZE_(crtl_ss, REG_B_out, STORE_SIZE_out); 
 
-  Instr_Reg IR_(clk, rst, 1'b1, MEM_out, OPCODE, RS, RT, OFFSET); //crtl_irwrite
- 
-  mux_regDst MUX_REG_DST_(crtl_regdst, RT, RS, OFFSET[4:0], MUX_REG_DST_out); 
+  Instr_Reg IR_(clk, out_reset, crtl_irwrite, MEM_out, OPCODE, RS, RT, OFFSET); //crtl_irwrite
+  
+  mux_regDst MUX_REG_DST_(crtl_regdst, RT, RS, OFFSET[15:11], MUX_REG_DST_out); 
               
   mux_memToReg MUX_MEM_TO_REG_(crtl_memtoreg, REG_B_out , ALU_out, REG_DES_out, REG_A_out, MEM_DATA_REG_out, XTEND_TO_32_out, REG_HIGH_out, REG_LOW_out , PC_out, LOAD_SIZE_out, MUX_MEM_TO_REG_out);
 
-  Registrador MEM_DATA_REG_(clk, rst, crtl_memDataRegWrite,  MEM_out, MEM_DATA_REG_out);
+  Registrador MEM_DATA_REG_(clk, out_reset, crtl_memDataRegWrite,  MEM_out, MEM_DATA_REG_out);
 
-  Banco_reg REG_BASE_(clk, rst, crtl_regwrite, RS, RT, MUX_REG_DST_out, MUX_MEM_TO_REG_out, READ_DATA_A_out, READ_DATA_B_out);
- 
-  Registrador REG_A_(clk, rst, crtl_rega, READ_DATA_A_out, REG_A_out);
+  Banco_reg REG_BASE_(clk, out_reset, crtl_regwrite, RS, RT, MUX_REG_DST_out, MUX_MEM_TO_REG_out, READ_DATA_A_out, READ_DATA_B_out);
+  
+  Registrador REG_A_(clk, out_reset, crtl_rega, READ_DATA_A_out, REG_A_out);
 
-  Registrador REG_B_(clk, rst, crtl_regb, READ_DATA_B_out, REG_B_out);
+  Registrador REG_B_(clk, out_reset, crtl_regb, READ_DATA_B_out, REG_B_out);
 
   mux_AluA MUX_ULA_A_(crtl_ulasrca, PC_out, REG_A_out, MUX_ULA_A_out);
 
@@ -161,9 +162,9 @@ module cpu_unit(
 
   xtend_to_32 XTEND_TO_32_(ULA_LT, XTEND_TO_32_out);
 
-  Registrador REG_ALU_OUT_(clk, rst, crtl_regaluout, ULA_RESULT, ALU_out);
+  Registrador REG_ALU_OUT_(clk, out_reset, crtl_regaluout, ULA_RESULT, ALU_out);
 
-  Registrador REG_EPC_(clk, rst, crtl_regepc, ULA_RESULT, EPC_out);
+  Registrador REG_EPC_(clk, out_reset, crtl_regepc, ULA_RESULT, EPC_out);
 
   mux_pcSource MUX_PC_SOURCE_(crtl_pcsource, ULA_RESULT, EPC_out, ALU_out, REG_A_out, SHIFT_LEFT_TWO_out, LOAD_SIZE_out, MEM_DATA_REG_out, MUX_PC_SOURCE_out);
 
@@ -173,12 +174,12 @@ module cpu_unit(
 
   mux_Iord_muxInSfht MUX_INSFHT_(crtl_insfht, REG_A_out, XTEND_out, REG_B_out , MUX_INSFHT_out);
  
-  RegDesloc REG_DES_(clk, rst, crtl_sideshifter, MUX_MUXSHFT_out, MUX_INSFHT_out, REG_DES_out);
+  RegDesloc REG_DES_(clk, out_reset, crtl_sideshifter, MUX_MUXSHFT_out, MUX_INSFHT_out, REG_DES_out);
 
-  Registrador REG_HIGH_(clk, rst, crtl_reghigh, MULTI_DIV_HIGH_out, REG_HIGH_out);
+  Registrador REG_HIGH_(clk, out_reset, crtl_reghigh, MULTI_DIV_HIGH_out, REG_HIGH_out);
 
-  Registrador REG_LOW_(clk, rst, crtl_reglow, MULTI_DIV_LOW_out, REG_LOW_out);
+  Registrador REG_LOW_(clk, out_reset, crtl_reglow, MULTI_DIV_LOW_out, REG_LOW_out);
 
-  multi_div MULTI_DIV_(clk, crtl_setmd, rst, REG_A_out, REG_B_out, MULTI_DIV_HIGH_out, MULTI_DIV_LOW_out, zero);
+  multi_div MULTI_DIV_(clk, crtl_setmd, out_reset, REG_A_out, REG_B_out, MULTI_DIV_HIGH_out, MULTI_DIV_LOW_out, zero);
 
 endmodule
