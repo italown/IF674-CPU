@@ -7,7 +7,7 @@ module mux_muxShft (
 );
     
     assign out_data = (selector == 2'b00) ? data_0[4:0]                          :
-                      (selector == 2'b01) ? 32'b10000                            :
+                      (selector == 2'b01) ? 5'b10000                             :
                       (selector == 2'b10) ? data_2[4:0]                          :
                       data_3[4:0];
 
