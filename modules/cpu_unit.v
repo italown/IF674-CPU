@@ -89,6 +89,10 @@ module cpu_unit(
     OPCODE, 
     ULA_EQ, 
     ULA_GT,
+    //Erros
+    ULA_OVERFLOW,
+    zero,
+    // Control wire
     crtl_error,
     crtl_iord,
     crtl_insfht, 
