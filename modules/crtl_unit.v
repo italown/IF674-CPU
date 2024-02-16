@@ -2738,7 +2738,7 @@ always @(posedge clk) begin
           crtl_memtoreg = 4'b0000;
           crtl_regwrite = 1'b0;
           crtl_ls = 1'b0;
-          crtl_muxshf = 2'b00;
+          crtl_muxshf = 2'b01;
           crtl_setmd = 1'b0;
           crtl_pcwritecond = 1'b0;
           crtl_pcwrite = 1'b0;        
@@ -2804,7 +2804,7 @@ always @(posedge clk) begin
           crtl_setmd = 1'b0;
           crtl_pcwritecond = 1'b0;
           crtl_pcwrite = 1'b0;        
-          crtl_sideshifter = 3'b000;
+          crtl_sideshifter = 3'b000;      //////
           crtl_memDataRegWrite = 1'b0;
           crtl_rega = 1'b0;
           crtl_regb = 1'b0;
@@ -3212,7 +3212,7 @@ always @(posedge clk) begin
           crtl_ss = 2'b00;
           crtl_irwrite = 1'b0;        
           crtl_regdst = 3'b000;
-          crtl_memtoreg = 4'b0000;
+          crtl_memtoreg = 4'b0110;
           crtl_regwrite = 1'b1;           ///////
           crtl_ls = 1'b0;
           crtl_muxshf = 2'b00;
