@@ -84,6 +84,7 @@ reg STARTER = 0;
   parameter ST_RTE = 6'b100001;
   parameter ST_XCHG = 6'b100010;
   parameter ST_RESET = 6'b100011;
+  parameter ST_OPERROR = 6'b100100;
   // Opcode state
   // TIPO I
   parameter TIPO_R = 6'b000000;
@@ -273,112 +274,46 @@ always @(posedge clk) begin
         end
         else if (COUNTER == 6'b000011) begin
           case (OPCODE)
-            ADDI: begin
-              STATE = ST_ADDI;
-            end
-            ADDIU: begin
-              STATE = ST_ADDIU;
-            end
-            BEQ: begin
-              STATE = ST_BEQ;
-            end
-            BNE: begin
-              STATE = ST_BNE;
-            end
-            BLE: begin
-              STATE = ST_BLE;
-            end
-            BGT: begin
-              STATE = ST_BGT;
-            end
-            SRAM: begin
-              STATE = ST_SRAM;
-            end
-            LB: begin
-              STATE = ST_LB;
-            end
-            LH: begin
-              STATE = ST_LH;
-            end
-            LUI: begin
-              STATE = ST_LUI;
-            end
-            LW: begin
-              STATE = ST_LW;
-            end
-            SB: begin
-              STATE = ST_SB;
-            end
-            SH: begin
-              STATE = ST_SH;
-            end
-            SLTI: begin
-              STATE = ST_SLTI;
-            end
-            SW: begin
-              STATE = ST_SW;
-            end
-            J: begin
-              STATE = ST_J;
-            end
-            JAL: begin
-              STATE = ST_JAL;
-            end
+            ADDI: STATE = ST_ADDI;
+            ADDIU: STATE = ST_ADDIU;
+            BEQ: STATE = ST_BEQ;
+            BNE: STATE = ST_BNE;
+            BLE: STATE = ST_BLE;
+            BGT: STATE = ST_BGT;
+            SRAM: STATE = ST_SRAM;
+            LB: STATE = ST_LB;
+            LH: STATE = ST_LH;
+            LUI: STATE = ST_LUI;
+            LW: STATE = ST_LW;
+            SB: STATE = ST_SB;
+            SH: STATE = ST_SH;
+            SLTI: STATE = ST_SLTI;
+            SW: STATE = ST_SW;
+            J: STATE = ST_J;
+            JAL: STATE = ST_JAL;
             TIPO_R: begin
               case(FUNCT)
-              ADD: begin
-                STATE = ST_ADD;
-              end
-              AND: begin
-                STATE = ST_AND;
-              end
-              DIV: begin
-                STATE = ST_DIV;
-              end
-              MULT: begin
-                STATE = ST_MULT;
-              end
-              JR: begin
-                STATE = ST_JR;
-              end
-              MFHI: begin
-                STATE = ST_MFHI;
-              end
-              MFLO: begin
-                STATE = ST_MFLO;
-              end
-              SLL: begin
-                STATE = ST_SLL;
-              end
-              SLLV: begin
-                STATE = ST_SLLV;
-              end
-              SLT: begin
-                STATE = ST_SLT;
-              end
-              SRA: begin
-                STATE = ST_SRA;
-              end
-              SRAV: begin
-                STATE = ST_SRAV;
-              end
-              SRL: begin
-                STATE = ST_SRL;
-              end
-              SUB: begin
-                STATE = ST_SUB;
-              end
-              BREAK: begin
-                STATE = ST_BREAK;
-              end
-              RTE: begin
-                STATE = ST_RTE;
-              end
-              XCHG: begin
-                STATE = ST_XCHG;
-              end
+              ADD: STATE = ST_ADD;
+              AND: STATE = ST_AND;
+              DIV: STATE = ST_DIV;
+              MULT: STATE = ST_MULT;
+              JR: STATE = ST_JR;
+              MFHI: STATE = ST_MFHI;
+              MFLO: STATE = ST_MFLO;
+              SLL: STATE = ST_SLL;
+              SLLV: STATE = ST_SLLV;
+              SLT: STATE = ST_SLT;
+              SRA: STATE = ST_SRA;
+              SRAV: STATE = ST_SRAV;
+              SRL: STATE = ST_SRL;
+              SUB: STATE = ST_SUB;
+              BREAK: STATE = ST_BREAK;
+              RTE: STATE = ST_RTE;
+              XCHG: STATE = ST_XCHG;
+              default: STATE = ST_OPERROR;
               endcase
             end
+            default: STATE = ST_OPERROR;
           endcase
           crtl_ulasrca = 1'b0;        
           crtl_ulasrcb = 2'b00;        ///////
