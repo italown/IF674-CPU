@@ -395,7 +395,7 @@ always @(posedge clk) begin
           crtl_irwrite = 1'b0;        
           crtl_regdst = 3'b000;
           crtl_memtoreg = 4'b0000;
-          crtl_regwrite = 1'b1;         ///////
+          crtl_regwrite = 1'b0;         ///////
           crtl_ls = 2'b00;
           crtl_muxshf = 2'b00;
           crtl_setmd = 1'b0;
@@ -1471,7 +1471,7 @@ always @(posedge clk) begin
           crtl_ulasrcb = 2'b10;        
           crtl_aluop = 3'b001;               
           crtl_pcsource = 3'b000;     
-          crtl_iord = 2'b10;      //////    
+          crtl_iord = 2'b00;      //////    
           crtl_memwrite = 1'b0;   //////    
           crtl_error = 2'b00;
           crtl_insfht = 2'b00;
@@ -1503,7 +1503,7 @@ always @(posedge clk) begin
           crtl_ulasrcb = 2'b10;        
           crtl_aluop = 3'b001;               
           crtl_pcsource = 3'b000;     
-          crtl_iord = 2'b10;         
+          crtl_iord = 2'b00;         
           crtl_memwrite = 1'b0;       
           crtl_error = 2'b00;
           crtl_insfht = 2'b00;
@@ -1536,7 +1536,7 @@ always @(posedge clk) begin
           crtl_ulasrcb = 2'b10;        
           crtl_aluop = 3'b001;               
           crtl_pcsource = 3'b000;     
-          crtl_iord = 2'b10;         
+          crtl_iord = 2'b00;         
           crtl_memwrite = 1'b0;       
           crtl_error = 2'b00;
           crtl_insfht = 2'b10;   //////
@@ -1569,7 +1569,7 @@ always @(posedge clk) begin
           crtl_ulasrcb = 2'b10;        
           crtl_aluop = 3'b001;               
           crtl_pcsource = 3'b000;     
-          crtl_iord = 2'b10;         
+          crtl_iord = 2'b00;         
           crtl_memwrite = 1'b0;       
           crtl_error = 2'b00;
           crtl_insfht = 2'b10;   //////
@@ -1602,7 +1602,7 @@ always @(posedge clk) begin
           crtl_ulasrcb = 2'b10;        
           crtl_aluop = 3'b001;               
           crtl_pcsource = 3'b000;     
-          crtl_iord = 2'b10;         
+          crtl_iord = 2'b00;         
           crtl_memwrite = 1'b0;       
           crtl_error = 2'b00;
           crtl_insfht = 2'b10;   
