@@ -4238,7 +4238,7 @@ always @(posedge clk) begin
           crtl_pcsource = 3'b000;     
           crtl_iord = 2'b10;        //////         
           crtl_memwrite = 1'b0;     //////  
-          crtl_error = 2'b00;       //////
+          crtl_error = 2'b10;       //////
           crtl_insfht = 2'b00;
           crtl_ss = 2'b00;
           crtl_irwrite = 1'b0;        
@@ -4396,7 +4396,7 @@ always @(posedge clk) begin
           crtl_pcsource = 3'b000;     
           crtl_iord = 2'b10;        //////         
           crtl_memwrite = 1'b0;     //////  
-          crtl_error = 2'b00;       //////
+          crtl_error = 2'b01;       //////
           crtl_insfht = 2'b00;
           crtl_ss = 2'b00;
           crtl_irwrite = 1'b0;        
@@ -4450,7 +4450,7 @@ always @(posedge clk) begin
 
           COUNTER = COUNTER + 1;
         end else if (COUNTER == 6'b000101) begin
-          STATE = ST_COMMON;
+          STATE = ST_OVERFLOW;
 
           crtl_ulasrca = 1'b0;        
           crtl_ulasrcb = 2'b00;        
@@ -4479,7 +4479,7 @@ always @(posedge clk) begin
           crtl_reghigh = 1'b0;
           crtl_reglow = 1'b0;
 
-          COUNTER = 0;
+          COUNTER = COUNTER + 1;
         end
       end
     endcase
