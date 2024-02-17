@@ -774,7 +774,8 @@ always @(posedge clk) begin
       end
       ST_BREAK: begin
         if(COUNTER == 6'b000000) begin
-          STATE = ST_COMMON;
+          STATE = ST_BREAK;
+
           crtl_ulasrca = 1'b0;              //////
           crtl_ulasrcb = 2'b01;             //////
           crtl_aluop = 3'b010;              //////          
@@ -802,7 +803,13 @@ always @(posedge clk) begin
           crtl_reghigh = 1'b0;
           crtl_reglow = 1'b0;
 
-          COUNTER = 0;
+          COUNTER = COUNTER+1;
+        end else if(COUNTER == 6'b000001) begin
+            
+            STATE = ST_COMMON;
+            crtl_pcwrite = 1'b0;                //////
+
+            COUNTER = 0;
         end
       end
       ST_JR: begin
@@ -839,7 +846,7 @@ always @(posedge clk) begin
           COUNTER = COUNTER + 1;       
         end
         else if(COUNTER == 6'b000001) begin
-          STATE = ST_COMMON;
+          STATE = ST_JR;
 
           crtl_ulasrca = 1'b0;      
           crtl_ulasrcb = 2'b00;         
@@ -868,7 +875,12 @@ always @(posedge clk) begin
           crtl_reghigh = 1'b0;
           crtl_reglow = 1'b0;
 
-          COUNTER = 0;      
+          COUNTER = COUNTER+1;      
+        end else if(COUNTER == 6'b000010) begin
+          
+          STATE = ST_COMMON;
+          COUNTER = 0;
+
         end
       end
       ST_MFHI: begin
@@ -968,7 +980,7 @@ always @(posedge clk) begin
           crtl_reglow = 1'b0;
 
           COUNTER = COUNTER + 1;
-        end else if (COUNTER < 6'b100000) begin
+        end else if (COUNTER < 6'b100001) begin
           STATE = ST_MULT;
 
           crtl_ulasrca = 1'b0;        
@@ -995,11 +1007,11 @@ always @(posedge clk) begin
           crtl_regb = 1'b0;                //////
           crtl_regaluout = 1'b0;
           crtl_regepc = 1'b0;
-          crtl_reghigh = 1'b0;
-          crtl_reglow = 1'b0;
+          crtl_reghigh = 1'b1;
+          crtl_reglow = 1'b1;
 
           COUNTER = COUNTER + 1;
-        end else if (COUNTER == 6'b100000) begin
+        end else if (COUNTER == 6'b100001) begin
           STATE = ST_COMMON;
           
           crtl_ulasrca = 1'b0;        
@@ -1064,7 +1076,7 @@ always @(posedge clk) begin
           crtl_reglow = 1'b0;
 
           COUNTER = COUNTER + 1;
-        end else if (COUNTER < 6'b100000) begin
+        end else if (COUNTER < 6'b100001) begin
           STATE = ST_DIV;
 
           crtl_ulasrca = 1'b0;        
@@ -1091,14 +1103,14 @@ always @(posedge clk) begin
           crtl_regb = 1'b0;             ///////
           crtl_regaluout = 1'b0;
           crtl_regepc = 1'b0;
-          crtl_reghigh = 1'b0;
-          crtl_reglow = 1'b0;
+          crtl_reghigh = 1'b1;
+          crtl_reglow = 1'b1;
 
           COUNTER = COUNTER + 1;
-        end else if (overflow) begin
+        end else if (zero) begin
           STATE = ST_ZERO;
           COUNTER = 0;
-        end else if (COUNTER == 6'b100000) begin
+        end else if (COUNTER == 6'b100001) begin
           STATE = ST_COMMON;
 
           crtl_ulasrca = 1'b0;        
@@ -1718,6 +1730,39 @@ always @(posedge clk) begin
         end
         else if(COUNTER == 6'b000010 && eq == 1) begin
 
+          STATE = ST_BEQ;
+
+          crtl_ulasrca = 1'b1;      
+          crtl_ulasrcb = 2'b00;        
+          crtl_aluop = 3'b111;         
+          crtl_pcsource = 3'b010;     /////
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;         
+          crtl_memtoreg = 4'b0000;      
+          crtl_regwrite = 1'b0;          
+          crtl_ls = 2'b00;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b1;       /////    
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;            
+          crtl_regb = 1'b0;            
+          crtl_regaluout = 1'b0;    
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER +1;
+        end
+       else if(COUNTER == 6'b000011 && eq == 1) begin
+
           STATE = ST_COMMON;
 
           crtl_ulasrca = 1'b1;      
@@ -1913,6 +1958,37 @@ always @(posedge clk) begin
 
           COUNTER = COUNTER + 1;
         end else if (COUNTER == 6'b000010 && eq == 0) begin
+          STATE = ST_BNE;
+
+          crtl_ulasrca = 1'b0;        
+          crtl_ulasrcb = 2'b00;        
+          crtl_aluop = 3'b000;          
+          crtl_pcsource = 3'b010;           ///////     
+          crtl_iord = 2'b00;          
+          crtl_memwrite = 1'b0;       
+          crtl_error = 2'b00;
+          crtl_insfht = 2'b00;
+          crtl_ss = 2'b00;
+          crtl_irwrite = 1'b0;        
+          crtl_regdst = 3'b000;
+          crtl_memtoreg = 4'b0000;
+          crtl_regwrite = 1'b0;
+          crtl_ls = 1'b0;
+          crtl_muxshf = 2'b00;
+          crtl_setmd = 1'b0;
+          crtl_pcwritecond = 1'b0;
+          crtl_pcwrite = 1'b1;                ///////        
+          crtl_sideshifter = 3'b000;
+          crtl_memDataRegWrite = 1'b0;
+          crtl_rega = 1'b0;
+          crtl_regb = 1'b0;
+          crtl_regaluout = 1'b0;
+          crtl_regepc = 1'b0;
+          crtl_reghigh = 1'b0;
+          crtl_reglow = 1'b0;
+
+          COUNTER = COUNTER+1;
+        end else if (COUNTER == 6'b000011 && eq == 0) begin
           STATE = ST_COMMON;
 
           crtl_ulasrca = 1'b0;        
@@ -2039,8 +2115,8 @@ always @(posedge clk) begin
           crtl_reglow = 1'b0;
 
           COUNTER = COUNTER + 1;
-        end else if (COUNTER == 6'b000010 && (gt == 0)) begin
-          STATE = ST_COMMON;
+        end else if (COUNTER == 6'b000010 && gt == 0) begin
+          STATE = ST_BLE;
 
           crtl_ulasrca = 1'b0;        
           crtl_ulasrcb = 2'b00;        
@@ -2069,7 +2145,12 @@ always @(posedge clk) begin
           crtl_reghigh = 1'b0;
           crtl_reglow = 1'b0;
 
-          COUNTER = 0;
+          COUNTER =COUNTER+1;
+        end else if(COUNTER == 6'b000011) begin
+
+            STATE = ST_COMMON;
+            COUNTER = 0;
+
         end else if (COUNTER == 6'b000010 && gt == 1) begin
           STATE = ST_COMMON;
 
@@ -2167,7 +2248,7 @@ always @(posedge clk) begin
 
           COUNTER = COUNTER + 1;
         end else if (COUNTER == 6'b000010 && gt == 1) begin
-          STATE = ST_COMMON;
+          STATE = ST_BGT;
 
           crtl_ulasrca = 1'b0;        
           crtl_ulasrcb = 2'b00;        
@@ -2196,7 +2277,13 @@ always @(posedge clk) begin
           crtl_reghigh = 1'b0;
           crtl_reglow = 1'b0;
 
+          COUNTER = COUNTER+1;
+        end else if(COUNTER == 6'b000011) begin
+        
+          STATE = ST_COMMON;
           COUNTER = 0;
+
+
         end else if (COUNTER == 6'b000010 && gt == 0) begin
           STATE = ST_COMMON;
 
@@ -3186,7 +3273,7 @@ always @(posedge clk) begin
       end
       ST_J: begin
         if (COUNTER == 6'b000000) begin
-          STATE = ST_COMMON;
+          STATE = ST_J;
 
           crtl_ulasrca = 1'b0;        
           crtl_ulasrcb = 2'b00;        
@@ -3215,6 +3302,9 @@ always @(posedge clk) begin
           crtl_reghigh = 1'b0;
           crtl_reglow = 1'b0;
 
+          COUNTER = COUNTER+1;
+        end else if(COUNTER == 6'b000001) begin
+          STATE = ST_COMMON;
           COUNTER = 0;
         end
       end
