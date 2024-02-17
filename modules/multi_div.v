@@ -27,9 +27,11 @@ module multi_div (
     reg [31:0] data_a_aux_div; // Auxiliar para data_a
     reg [31:0] data_b_aux_div; // Auxiliar para data_b
     reg inverter_quociente; // Inverter quociente
+    reg inverter_resto; // Inverter resto
     reg [31:0] dividendo;
     reg [31:0] divisor;
     
+
     always @(posedge clk or posedge reset) begin
         if (reset || start == 1'b0) begin
             zero_flag <= 0;
@@ -49,10 +51,12 @@ module multi_div (
                 if(data_a[31] == 1 && data_b[31] == 1) begin // Se ambos negativos
                   data_a_aux_div = ~data_a + 1;
                   data_b_aux_div = ~data_b + 1;
+                  inverter_resto = 1;
                 end
                 if(data_a[31] == 1 && data_b[31] == 0) begin // Se a negativo e b positivo
                   data_a_aux_div = ~data_a + 1;
                   inverter_quociente = 1; // Inverter quociente
+                  inverter_resto = 1; // Inverter resto
                 end
                 if(data_a[31] == 0 && data_b[31] == 1) begin // Se a positivo e b negativo
                   data_b_aux_div = ~data_b + 1;
@@ -79,10 +83,13 @@ module multi_div (
                 if (cycle_counter == 32) begin
                   if (inverter_quociente == 1) begin
                     result_low = ~dividendo + 1; // Inverter quociente
-                    result_high = ~acumulator_div + 1; // resto = acumulator
                   end else begin
                     result_low = dividendo; // quociente = Q
-                    result_high = acumulator_div; // resto = acumulator
+                  end
+                  if (inverter_resto == 1) begin
+                    result_high = ~acumulator_div + 1; // resto = acumulator
+                  end else begin
+                    result_high = acumulator_div; // resto = acumulator                  
                   end
                   
                 end
