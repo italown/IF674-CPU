@@ -4,6 +4,7 @@ module multi_div (
     input wire              reset,
     input wire  [31:0]      data_a,
     input wire  [31:0]      data_b,
+    input wire              start,
     output wire [31:0]      out_high,
     output wire [31:0]      out_low,
     output wire             zero
@@ -30,7 +31,7 @@ module multi_div (
     reg [31:0] divisor;
     
     always @(posedge clk or posedge reset) begin
-        if (reset) begin
+        if (reset || start == 1'b0) begin
             zero_flag <= 0;
             result_high <= 0;
             result_low <= 0;

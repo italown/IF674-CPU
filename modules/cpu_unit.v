@@ -21,6 +21,7 @@ module cpu_unit(
   wire crtl_setmd;
   wire crtl_pcwritecond;
   wire crtl_pcwrite;
+  wire out_start;
   // Control wire reg desloc
   wire [2:0] crtl_sideshifter;
   // Control wire registers
@@ -121,7 +122,8 @@ module cpu_unit(
     crtl_regepc,
     crtl_reghigh,
     crtl_reglow,
-    out_reset
+    out_reset,
+    out_start
     );
 
   assign PC_w = (crtl_pcwrite || (ULA_ZERO && crtl_pcwritecond));
@@ -184,6 +186,6 @@ module cpu_unit(
 
   Registrador REG_LOW_(clk, out_reset, crtl_reglow, MULTI_DIV_LOW_out, REG_LOW_out);
 
-  multi_div MULTI_DIV_(clk, crtl_setmd, out_reset, REG_A_out, REG_B_out, MULTI_DIV_HIGH_out, MULTI_DIV_LOW_out, zero);
+  multi_div MULTI_DIV_(clk, crtl_setmd, out_reset, REG_A_out, REG_B_out, out_start, MULTI_DIV_HIGH_out, MULTI_DIV_LOW_out, zero);
 
 endmodule
