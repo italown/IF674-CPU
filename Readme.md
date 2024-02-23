@@ -5,7 +5,7 @@ O projeto consiste em uma CPU arquitetada em verilog para a execução de 33 ins
 
 A CPU foi implementada com base no diagrama de blocos a seguir:
 
-[](relatorio/figure/diagrama_bloco.png)
+![Diagrama de blocos](relatorio/figure/diagrama_bloco.png)
 
 Foi elaborado também uma [máquina de estados](https://drive.google.com/file/d/1FuZZhCEVw59fkpFMSG5WTrhsfIk9MPXI/view?usp=sharing) (FSM) para mapear os ciclos de execução de cada instrução.
 
@@ -18,8 +18,8 @@ Para poder testar, é necessário algum simulador, como o ModelSim e inserir a v
 
 Abaixo segue a listas de instruções e seus valores para os parsers.
 
-[](/relatorio/figure/instrucoes_tipo_r.png)
+![Instruções tipo R](/relatorio/figure/instrucoes_tipo_r.png)
 
-[](/relatorio/figure/instrucoes_tipo_i.png)
+![Instruções tipo I](/relatorio/figure/instrucoes_tipo_i.png)
 
-[](/relatorio/figure/instrucoes_tipo_j.png)
+![Instruções tipo J](/relatorio/figure/instrucoes_tipo_j.png)
